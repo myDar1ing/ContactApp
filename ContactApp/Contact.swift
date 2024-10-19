@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Contact{
+struct Contact : Codable{
     var name : String
     var surname : String
     var company : String
