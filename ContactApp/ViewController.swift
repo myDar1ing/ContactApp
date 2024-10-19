@@ -125,25 +125,43 @@ class ContactEntryVIewController : UIViewController {
             showAlert(message: "Name and Phone Number are required.")
             return
         }
+        
+        // Validate that the phone number is numeric
+        if !isNumeric(number) {
+            showAlert(message: "Phone Number must be numeric.")
+            return
+        }
+        
         let updatedContact = Contact(
-            name : name,
-            surname : surnameTextField.text ?? "",
+            name: name,
+            surname: surnameTextField.text ?? "",
             company: companyTextField.text ?? "",
             phoneNumber: number,
-            email : emailTextField.text ?? ""
+            email: emailTextField.text ?? ""
         )
+        
         if isEditMode, let index = contactIndex {
-            //updating the existing contact
+            // Updating the existing contact
             delegate?.didUpdateContact(updatedContact, at: index)
         } else {
-            //add new contact
+            // Add new contact
             delegate?.didAddContact(updatedContact)
         }
-            navigationController?.popViewController(animated: true)
+        
+        navigationController?.popViewController(animated: true)
     }
+
+    // Helper function to check if the string is numeric
+    private func isNumeric(_ string: String) -> Bool {
+        let numberSet = CharacterSet(charactersIn: "0123456789").inverted
+        return string.rangeOfCharacter(from: numberSet) == nil
+    }
+
     private func showAlert(message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
 }
+
+
